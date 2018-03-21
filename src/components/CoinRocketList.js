@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled, { keyframes } from 'styled-components'
 import Responsive from 'react-responsive'
+import MoonFlagsList from './MoonFlagsList'
 
 import { desktop_min, mobile_max } from '../helpers/mediaQueries'
 
@@ -22,43 +23,57 @@ class CoinRocketList extends Component {
       return 1
     })
 
-    return coinList.map(coin => {
+    return coinList.map((coin, index) => {
+      //if(!coin.isMoonTarget) {
       let percent = Math.round(coin.price_usd * 100) / coin.moonTarget
       let progress = 100 * (percent / 100)
       return (
         <CoinRocket
+          index={index}
           key={coin.id}
           isGoingUp={coin.percent_change_1h > 0}
           coin={coin}
-          progress={progress}
+          isMoonTarget={coin.isMoonTarget}
+          progress={coin.isMoonTarget ? 100 : progress}
         />
       )
+      //}
     })
   }
 
   render() {
-    return [
-      <CoinPath key="1">
-        {this.renderCoinShips()}
-        <Responsive maxWidth={mobile_max}>
-          <Moon
-            animated
-            size={250}
-            position={{
-              top: 250,
-              right: -285
-            }}
-          />
-        </Responsive>
-      </CoinPath>,
-      <CallToActionButton
-        key="2"
-        title="COINS"
-        isHidden={this.props.isShowingAddCoin}
-        isAbsolute
-        callBack={this.props.toggleAddCoin}
-      />
-    ]
+    return (
+      <MobileCoinPathWrapper>
+        <CoinPath>
+          {this.renderCoinShips()}
+          <Responsive maxWidth={mobile_max}>
+            <Moon
+              animated
+              size={250}
+              position={{
+                top: 'auto',
+                left: '1200px'
+              }}
+            />
+            <MoonFlagsList
+              width={250}
+              flags={this.props.myCoins}
+              position={{
+                top: 'auto',
+                left: '1200px'
+              }}
+              isMobile={true}
+            />
+          </Responsive>
+        </CoinPath>
+        <CallToActionButton
+          title="COINS"
+          isHidden={this.props.isShowingAddCoin}
+          isAbsolute
+          callBack={this.props.toggleAddCoin}
+        />
+      </MobileCoinPathWrapper>
+    )
   }
 }
 
@@ -76,10 +91,15 @@ const CoinPath = styled.ul`
     top: calc(50vh - 300px);
   }
   @media (max-width: ${mobile_max}px) {
-    width: 1200px;
+    width: 100vw;
     overflow-y: scroll;
-    height: 750px;
-    padding-top: 200px;
-    bottom: 0;
+    height: 100%;
+  }
+`
+
+const MobileCoinPathWrapper = styled.div`
+  @media (max-width: ${mobile_max}px) {
+    height: 100%;
+    position: relative;
   }
 `

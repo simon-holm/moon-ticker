@@ -3,13 +3,16 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="user-scalable=no, initial-scale=1, minimal-ui, maximum-scale=1, minimum-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui, maximum-scale=1, minimum-scale=1, user-scalable=no"
+  />
   <meta name="theme-color" content="#000000">
   <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="%PUBLIC_URL%/icon.png">
   <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
   <link href="https://fonts.googleapis.com/css?family=Bangers" rel="stylesheet">
   <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
@@ -22,10 +25,10 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-  <title>React App</title>
+  <title>Moon Ticker</title>
 </head>
 
-<body style="overflow:hidden;">
+<body>
   <noscript>
     You need to enable JavaScript to run this app.
   </noscript>

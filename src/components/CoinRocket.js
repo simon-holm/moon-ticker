@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled, { keyframes } from 'styled-components'
+import { desktop_min, mobile_max } from '../helpers/mediaQueries'
 
 import RocketFire from './RocketFire'
 import RocketSmoke from './RocketSmoke'
@@ -8,19 +9,24 @@ import coinIconPath from '../helpers/coinIconPath'
 
 class CoinRocket extends Component {
   render() {
+    console.log('crocket props', this.props)
     const {
       isGoingUp,
       progress,
-      coin: { name, moonTarget, price_usd, symbol, percent_change_1h },
+      index,
+      coin: { name, isMoonTarget, price_usd, symbol, percent_change_1h },
       coin
     } = this.props
+    console.log(index)
+    const isFirst = index === 0 ? true : false
+    console.log(isFirst)
     return (
-      <RocketPosition progress={progress}>
+      <RocketPosition progress={progress} isMoonTarget={isMoonTarget}>
         <Rocket onClick={() => console.log('Routa till detail sida')}>
-          <RocketHoverIcon>
+          <RocketHoverIcon isFirst={index == 0 ? true : false}>
             <img src={coinIconPath(coin)} alt="coin-icon" />
           </RocketHoverIcon>
-          <RocketHoverInfo>
+          <RocketHoverInfo isFirst={index == 0 ? true : false}>
             <h4>{name}</h4>
             <p>${price_usd}</p>
             <p>{percent_change_1h}%</p>
@@ -31,7 +37,7 @@ class CoinRocket extends Component {
               {!isGoingUp && <RocketSmoke />}
               <RocketBody
                 isGoingUp={isGoingUp}
-                src={'/assets/rocket.png'}
+                src={'./assets/rocket.png'}
                 alt="rocket"
               />
               <RocketTag isGoingUp={isGoingUp}>{symbol}</RocketTag>
@@ -58,8 +64,15 @@ transform: translateY(3px);
 `
 const RocketPosition = styled.li`
   transition: 4s all cubic-bezier(0.84, 0.07, 0.43, 1);
-  left: ${props => props.progress + '%'};
   position: relative;
+  visibility: ${props => (props.isMoonTarget ? 'hidden' : 'visible')};
+  @media (min-width: ${desktop_min}px) {
+    left: ${props => props.progress + '%'};
+  }
+  @media (max-width: ${mobile_max}px) {
+    left: ${props => 1200 * (props.progress / 100) + 'px'};
+    width: 150px;
+  }
 `
 const RocketHoverInfo = styled.div`
   background: #164454b0;
@@ -69,7 +82,7 @@ const RocketHoverInfo = styled.div`
   z-index: 1;
   position: absolute;
   visibility: hidden;
-  top: -110px;
+  top: ${props => (props.isFirst ? '40px' : '-90px')};
   clip-path: polygon(0 0, 98% 9%, 98% 98%, 4% 100%);
   padding: 10px;
   display: flex;
@@ -105,7 +118,7 @@ const RocketHoverIcon = styled.figure`
   overflow: hidden;
   visibility: hidden;
   position: absolute;
-  top: -132px;
+  top: ${props => (props.isFirst ? '20px' : '-112px')};
   left: -16px;
   z-index: 2;
   img {
